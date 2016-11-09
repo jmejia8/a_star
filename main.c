@@ -65,7 +65,7 @@ void a_star(int nodes,
 
 		// Crea el nuevo nodo para agregarlo a la cola
 		// Se agrega su identificador y el costo
-		Queue* new_node = create_node(i, cost + matrix[root][i] + heuristic[i]);
+		Queue* new_node = create_node(i, cost + matrix[root][i], heuristic[i]);
 		matrix[i][root] = 0;
 
 		// Se agrega la ruta para llegar a este nodo
@@ -119,7 +119,7 @@ int main(int argc, char const *argv[])
 
 	// Creamos el nodo fuente y se agrega a la 
 	// cola vacía
-	Queue* new_node = create_node(root, 0);
+	Queue* new_node = create_node(root, 0, heuristic[root]);
 	new_node->path[0] = root;
 	new_node->path_len = 1;
 

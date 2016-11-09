@@ -3,6 +3,7 @@ typedef struct _node
 {
 	int index;
 	int cost;
+	int heuristic;
 	int path[100];
 	int path_len;
 
@@ -24,7 +25,7 @@ int enqueue(Queue** front, Queue* new_node){
 	// de cada nodo
 
 	int i,
-		cost = new_node->cost,
+		cost = new_node->cost + new_node->heuristic,
 		index = new_node->index;
 
 
@@ -41,7 +42,9 @@ int enqueue(Queue** front, Queue* new_node){
 		// Si el costo del nuevo nodo es menor que 
 		// que cierto nodo en la cola, se agrega 
 		// el nuevo nodo al principio
-		if (cost < actual->cost){
+		int actual_cost = actual->cost + actual->heuristic;
+		
+		if (cost < actual_cost){
 			new_node->back = actual;
 			new_node->front = actual->front;
 
@@ -58,7 +61,7 @@ int enqueue(Queue** front, Queue* new_node){
 
 		// Si el costo es el mismo y alfabeticamente menor
 		// entonces se agraga antes del nodo en cuestión
-		if (cost == actual->cost && index <= actual->index){
+		if (cost == actual_cost && index <= actual->index){
 			new_node->back = actual;
 			new_node->front = actual->front;
 
@@ -133,7 +136,7 @@ Queue* dequeue(Queue** front){
 }
 
 
-Queue* create_node(int index, int cost){
+Queue* create_node(int index, int cost, int heuristic){
 	// Crea un nuevo nodo para ser agragado
 	// a la cola.
 	Queue* new_node = (Queue *) malloc(sizeof(Queue));
@@ -147,6 +150,7 @@ Queue* create_node(int index, int cost){
 
 	new_node->index  = index;
 	new_node->cost  = cost;
+	new_node->heuristic  = heuristic;
 	new_node->back  = NULL;
 	new_node->front  = NULL;
 
@@ -166,7 +170,8 @@ void print_queue(Queue **front, int nodes, char names[nodes][LEN_STRING]){
 			printf("%s -> ", names[actual->path[i]]);
 		}
 
-		printf("\t (%d)\n", actual->cost);
+		int sum = actual->cost + actual->heuristic;
+		printf("\t (%d + %d) = %d\n", actual->cost, actual->heuristic, sum);
 
 		actual = actual->back;
 	}
