@@ -134,8 +134,6 @@ void read_data(int nodes,
 			
 			int child = index_of(nodes, names, tmp_name);
 
-			printf("%s\n", tmp_name);
-
 			if (child < 0)
 				put_error("No se ha encontrado ese nodo (hijo).\n");
 
