@@ -1,7 +1,13 @@
 #include "tools.c"
 #include "queue.c"
 
-void a_star(int nodes, int matrix[nodes][nodes], int goal, Queue** _front){
+void a_star(int nodes,
+            int matrix[nodes][nodes],
+            int heuristic[nodes],
+            char names[nodes][LEN_STRING],
+            int goal,
+            Queue** _front)
+{
 
 	Queue* front = *_front;
 	
@@ -32,18 +38,18 @@ void a_star(int nodes, int matrix[nodes][nodes], int goal, Queue** _front){
 
 
 	// Imprime los nodos visitados o expandidos
-	print_visited();
+	print_visited(nodes, names);
 
 	// Si encontramos el objetivo se muestra
 	// la cola y se imprime la solución
 	if (is_goal(root, goal)){
-		print_queue(&front);
+		print_queue(&front, nodes, names);
 
 		printf("\n\nSolución:\n");
 
 		// imprime la solución
 		for ( i = 0; i < tmp->path_len; ++i){
-			printf("%c -> ", names[tmp->path[i]]);
+			printf("%s -> ", names[tmp->path[i]]);
 		}
 
 		// imprime el costo y termina ejecución del programa
@@ -75,13 +81,13 @@ void a_star(int nodes, int matrix[nodes][nodes], int goal, Queue** _front){
 	}
 
 	// imprime la cola
-	print_queue(&front);
+	print_queue(&front, nodes, names);
 
 	// Se libera la memoria
 	free(tmp);
 
 	// Hacer esto hasta que la cola esté vacía
-	a_star(nodes, matrix, goal, &front);
+	a_star(nodes, matrix, heuristic, names, goal, &front);
 }
 
 
@@ -101,10 +107,12 @@ int main(int argc, char const *argv[])
 
 	// matriz de adyacencia
 	int matrix[nodes][nodes];
+	int heuristic[nodes];
+	char names[nodes][LEN_STRING];
 
 	// Incializa la matriz de adyacencia, el nodo fuente y el
 	// objetivo a localizar
-	read_data(nodes, matrix, &root, &goal);
+	read_data(nodes, matrix, heuristic, names, &root, &goal);
 
 	// apuntador de la cola
 	Queue* front = NULL;
@@ -118,7 +126,7 @@ int main(int argc, char const *argv[])
 	enqueue(&front, new_node);
 
 	// Inicia búsqueda de costo uniforme 
-	a_star(nodes, matrix, goal, &front);
+	a_star(nodes, matrix, heuristic, names, goal, &front);
 
 
 	return 0;

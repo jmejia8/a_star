@@ -132,61 +132,6 @@ Queue* dequeue(Queue** front){
 	return aux;	
 }
 
-void read_data(int nodes, int matrix[nodes][nodes], int* root, int* goal){
-	// Inicializa los valores de entrada.
-
-	int i, j;
-
-	for (i = 0; i < nodes; ++i)
-		for (j = 0; j < nodes; ++j)
-			scanf("%d", &matrix[i][j]);
-
-	
-	scanf("%d", root);
-
-	if (*root < 0)
-	{
-		printf("Parámetro no válido.\n");
-		exit(0);
-	}
-
-
-	scanf("%d", goal);
-
-	if (*goal < 0)
-	{
-		printf("Parámetro no válido.\n");
-		exit(0);
-	}
-
-	for (i = 0; i < nodes; ++i)
-		matrix[i][*root] = 0;
-}
-
-int is_goal(int root, int goal){
-	if (root == goal)
-		return 1;
-	return 0;
-}
-
-void print_queue(Queue **front){
-	// Emprime el recorrido de cada 
-	// nodo en la cola de prioridad
-	Queue* actual = *front;
-	int i;
-
-	printf("  Queue:\n");
-	while(actual != NULL){
-		printf("\t");
-		for (i = 0; i < actual->path_len; ++i){
-			printf("%c -> ", names[actual->path[i]]);
-		}
-
-		printf("\t (%d)\n", actual->cost);
-
-		actual = actual->back;
-	}
-}
 
 Queue* create_node(int index, int cost){
 	// Crea un nuevo nodo para ser agragado
@@ -206,4 +151,23 @@ Queue* create_node(int index, int cost){
 	new_node->front  = NULL;
 
 	return new_node;
+}
+
+void print_queue(Queue **front, int nodes, char names[nodes][LEN_STRING]){
+	// Emprime el recorrido de cada 
+	// nodo en la cola de prioridad
+	Queue* actual = *front;
+	int i;
+
+	printf("  Queue:\n");
+	while(actual != NULL){
+		printf("\t");
+		for (i = 0; i < actual->path_len; ++i){
+			printf("%s -> ", names[actual->path[i]]);
+		}
+
+		printf("\t (%d)\n", actual->cost);
+
+		actual = actual->back;
+	}
 }
