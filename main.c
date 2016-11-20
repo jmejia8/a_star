@@ -69,10 +69,13 @@ void a_star(int nodes,
 		matrix[i][root] = 0;
 
 		// Se agrega la ruta para llegar a este nodo
-		for (j = 0; j < tmp->path_len; ++j)
+		for (j = 0; j < tmp->path_len; ++j){
 			new_node->path[j] = tmp->path[j];
+			new_node->cost_hist[j] = tmp->cost_hist[j];
+		}
 
 		new_node->path[j] = i;
+		new_node->cost_hist[j] = matrix[root][i];
 		new_node->path_len = tmp->path_len + 1;
 
 		// Se agrega a la cola de prioridad
@@ -121,6 +124,7 @@ int main(int argc, char const *argv[])
 	// cola vacía
 	Queue* new_node = create_node(root, 0, heuristic[root]);
 	new_node->path[0] = root;
+	new_node->cost_hist[0] = 0;
 	new_node->path_len = 1;
 
 	enqueue(&front, new_node);

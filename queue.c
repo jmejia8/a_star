@@ -5,6 +5,7 @@ typedef struct _node
 	int cost;
 	int heuristic;
 	int path[100];
+	int cost_hist[100];
 	int path_len;
 
 	struct _node* back;
@@ -59,6 +60,12 @@ int enqueue(Queue** front, Queue* new_node){
 			return 1;
 		}
 
+		// Si el index actual ya está en la cola y su costo
+		// es mayor, entonces no se agrega.
+
+		if (index == actual->index && cost >= actual_cost)
+			return 1;
+
 		// Si el costo es el mismo y alfabeticamente menor
 		// entonces se agraga antes del nodo en cuestión
 		if (cost == actual_cost && index <= actual->index){
@@ -77,7 +84,7 @@ int enqueue(Queue** front, Queue* new_node){
 		}
 
 		// Si se recorrió toda la cola 
-		// se agra el nuevo nodo al final
+		// se agrega el nuevo nodo al final
 		if (actual->back == NULL) {
 
 			new_node->front = actual;
@@ -170,8 +177,17 @@ void print_queue(Queue **front, int nodes, char names[nodes][LEN_STRING]){
 			printf("%s -> ", names[actual->path[i]]);
 		}
 
+		printf("  (");
+
+		for (i = 1; i < actual->path_len; ++i) {
+			printf("%d", actual->cost_hist[i]);
+			if (i == actual->path_len - 1)
+				break;
+			printf(" + ");
+		}
+		printf(")");
 		int sum = actual->cost + actual->heuristic;
-		printf("\t (%d + %d) = %d\n", actual->cost, actual->heuristic, sum);
+		printf(" + %d = %d\n", actual->heuristic, sum);
 
 		actual = actual->back;
 	}
